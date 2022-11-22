@@ -1,13 +1,20 @@
 function createFiboGenerator(end) {
   let count = 0
-  let fiboArray = [0, 1]
+  let prevValue = 0
+  let currentValue = 1
+  let nextValue = prevValue
 
   return function* fiboGenerator() {
     while (count < end) {
-      yield fiboArray[count]
+      yield nextValue
       count += 1
+      if (count === 1) {
+        nextValue = currentValue
+      }
       if (count > 1) {
-        fiboArray = [...fiboArray, fiboArray[count - 2] + fiboArray[count - 1]]
+        nextValue = prevValue + currentValue
+        prevValue = currentValue
+        currentValue = nextValue
       }
     }
   }

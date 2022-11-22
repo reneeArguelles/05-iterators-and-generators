@@ -1,6 +1,8 @@
 function createFiboIterable(end) {
   let count = 0
-  let fiboArray = [0, 1]
+  let prevValue = 0
+  let currentValue = 1
+  let nextValue = prevValue
 
   return {
     [Symbol.iterator]() {
@@ -8,10 +10,15 @@ function createFiboIterable(end) {
         next() {
           let result
           if (count < end) {
-            if (count > 1) {
-              fiboArray = [...fiboArray, fiboArray[count - 2] + fiboArray[count - 1]]
+            if (count === 1) {
+              nextValue = currentValue
             }
-            result = { value: fiboArray[count], done: false }
+            if (count > 1) {
+              nextValue = prevValue + currentValue
+              prevValue = currentValue
+              currentValue = nextValue
+            }
+            result = { value: nextValue, done: false }
             count += 1
             return result
           }
@@ -22,6 +29,6 @@ function createFiboIterable(end) {
   }
 }
 
-const fiboIterable = createFiboIterable(7)
+const fiboIterable = createFiboIterable(5)
 
 console.log([...fiboIterable])
